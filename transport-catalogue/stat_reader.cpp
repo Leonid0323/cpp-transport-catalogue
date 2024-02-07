@@ -70,4 +70,15 @@ void ParseAndPrintStat(const transport_catalogue::TransportCatalogue& transport_
     }
 }
     
+void IntputRequest(transport_catalogue::TransportCatalogue& catalogue, 
+                   std::istream& input, std::ostream& output){
+    int stat_request_count;
+    input >> stat_request_count >> std::ws;
+    for (int i = 0; i < stat_request_count; ++i) {
+        std::string line;
+        std::getline(input, line);
+        stat_reader::ParseAndPrintStat(catalogue, line, output);
+    }
+}
+    
 }

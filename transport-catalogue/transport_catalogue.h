@@ -1,7 +1,6 @@
 #pragma once
 #include<algorithm>
 #include<deque>
-#include <iostream>
 #include<string>
 #include<string_view>
 #include<unordered_map>
@@ -27,9 +26,9 @@ struct Bus{
 
 class TransportCatalogue {
 public:
-    void AddBus(std::string busname, std::vector<std::string_view> stops);
+    void AddBus(std::string&& busname, const std::vector<std::string_view>& stops);
     
-    void AddStop(std::string stopname, geo::Coordinates coordinates);
+    void AddStop(std::string&& stopname, geo::Coordinates coordinates);
    
     const Bus* SearchBus(std::string_view busname) const;
     

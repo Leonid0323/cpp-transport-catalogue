@@ -3,6 +3,7 @@
 #include<algorithm>
 #include <iosfwd>
 #include <iomanip>
+#include <iostream>
 #include <set>
 #include <string_view>
 #include <unordered_set>
@@ -22,4 +23,7 @@ struct Request{
 void ParseAndPrintStat(const transport_catalogue::TransportCatalogue& transport_catalogue, 
                        std::string_view request, std::ostream& output);
 
+void IntputRequest(transport_catalogue::TransportCatalogue& catalogue, 
+                   std::istream& input, std::ostream& output);
+    
 }

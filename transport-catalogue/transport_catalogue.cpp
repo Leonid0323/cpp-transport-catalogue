@@ -3,7 +3,7 @@
 
 namespace transport_catalogue{
     
-void TransportCatalogue::AddBus(std::string busname, std::vector<std::string_view> stops){
+void TransportCatalogue::AddBus(std::string&& busname, const std::vector<std::string_view>& stops){
     Bus bus;
     bus.name = std::move(busname);
     for (const auto& stopname : stops) {
@@ -18,7 +18,7 @@ void TransportCatalogue::AddBus(std::string busname, std::vector<std::string_vie
     }
 }
 
-void TransportCatalogue::AddStop(std::string stopname, geo::Coordinates coordinates){
+void TransportCatalogue::AddStop(std::string&& stopname, geo::Coordinates coordinates){
     Stop stop = {stopname, coordinates};
     stops_.push_back(std::move(stop));
     stopname_to_stop_[stops_.back().name] = &stops_.back();

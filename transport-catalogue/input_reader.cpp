@@ -106,17 +106,32 @@ void InputReader::ParseLine(std::string_view line) {
     }
 }
 
-void InputReader::ApplyCommands([[maybe_unused]] transport_catalogue::TransportCatalogue& catalogue) const{
+void InputReader::ApplyCommands([[maybe_unused]] transport_catalogue::TransportCatalogue& catalogue){
     std::vector<size_t> buses;
     for (size_t i = 0; i !=commands_.size(); ++i){
         if (commands_[i].command== "Stop"s){
-            catalogue.AddStop(commands_[i].id, ParseCoordinates(commands_[i].description));
+            catalogue.AddStop(std::move(commands_[i].id), ParseCoordinates(commands_[i].description));
         } else{
             buses.push_back(i);
         }
     }
     for (size_t i : buses){
-        catalogue.AddBus(commands_[i].id, ParseRoute(commands_[i].description));
+        catalogue.AddBus(std::move(commands_[i].id), ParseRoute(commands_[i].description));
+    }
+}
+    
+void InputData(transport_catalogue::TransportCatalogue& catalogue, std::istream& input){
+    int base_request_count;
+    input >> base_request_count >> std::ws;
+
+    {
+        InputReader reader;
+        for (int i = 0; i < base_request_count; ++i) {
+            std::string line;
+            std::getline(input, line);
+            reader.ParseLine(line);
+        }
+        reader.ApplyCommands(catalogue);
     }
 }
     
