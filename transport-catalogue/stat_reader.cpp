@@ -18,10 +18,18 @@ Request ParseRequest(std::string_view request){
     return parsed_request;
 }
 
-double CalculateRouteLength(const std::vector<const Stop*>& stops){
+double CalculateGeographyLength(const std::vector<const Stop*>& stops){
     double length = 0;
-    for(size_t i = 0; i!= stops.size()-1;++i){
+    for(size_t i = 0; i+1!= stops.size();++i){
         length +=ComputeDistance((*(stops[i])).coord, (*(stops[i+1])).coord);
+    }
+    return length;
+}
+
+int CalculateRouteLength(const TransportCatalogue& transport_catalogue, const std::vector<const Stop*>& stops) {
+    int length = 0;
+    for (size_t i = 0; i+1 != stops.size(); ++i) {
+        length += transport_catalogue.GetDistanceStops((*(stops[i])).name, (*(stops[i + 1])).name);
     }
     return length;
 }
@@ -37,8 +45,13 @@ void PrintStopInfo(const TransportCatalogue& transport_catalogue,
         std::vector<const Bus*> vec_buses(buses.begin(),buses.end());
         std::sort(vec_buses.begin(), vec_buses.end(), CompareSortBus);
         output << "Stop "s << stopname << ": buses "s;
-        for (const Bus* bus: vec_buses){
-            output << (*(bus)).name << " "s;
+        bool is_first = true;
+        for (const Bus* bus : vec_buses) {
+            if (!is_first) {
+                output << " "s;
+            }
+            output << (*(bus)).name;
+            is_first = false;
         }
         output << std::endl;
     }
@@ -53,8 +66,10 @@ void PrintBusInfo(const TransportCatalogue& transport_catalogue,
         output << "Bus "s << busname << ": "s << stops.size() << " stops on route, "s;
         std::unordered_set uset_stops(stops.begin(), stops.end());
         output << uset_stops.size() << " unique stops, "s;
-        double length = CalculateRouteLength(stops);
-        output << std::setprecision(6) << length << " route length"s << std::endl;
+        int length = CalculateRouteLength(transport_catalogue, stops);
+        double geography_length = CalculateGeographyLength(stops);
+        output << std::setprecision(6) << length << " route length, "s
+            << std::setprecision(6) << static_cast<double>(length)/geography_length << " curvature"s << std::endl;
     }
 }
 

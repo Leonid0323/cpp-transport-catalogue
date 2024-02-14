@@ -24,6 +24,14 @@ struct Bus{
     std::vector<const Stop*> stops;
 }; 
 
+struct StopDistanceHasher {
+    size_t operator()(const std::pair<const Stop*, const Stop*>& distance) const {
+        size_t first_hash = std::hash<const void*>{}(distance.first);
+        size_t second_hash = std::hash<const void*>{}(distance.second);
+        return first_hash + second_hash*37;
+    }
+};
+
 class TransportCatalogue {
 public:
     void AddBus(std::string&& busname, const std::vector<std::string_view>& stops);
@@ -37,6 +45,10 @@ public:
     std::vector<const Stop*> GetInfoAboutBus(std::string_view busname) const;
     
     std::set<const Bus*> GetInfoAboutStop(std::string_view stopname) const;
+
+    void AddDistanceStops(std::string_view lhs, std::string_view rhs, int distance);
+
+    int GetDistanceStops(std::string_view lhs, std::string_view rhs) const;
     
 private:
     
@@ -46,6 +58,7 @@ private:
     std::unordered_map<std::string_view, std::set<const Bus*>> stopname_to_bus_;
     std::deque<Bus> buses_;
     std::unordered_map<std::string_view, const Bus*> busname_to_stop_;
+    std::unordered_map<std::pair<const Stop*, const Stop*>, int, StopDistanceHasher> distance_;
 };
-    
+
 }

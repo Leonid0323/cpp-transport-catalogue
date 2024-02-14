@@ -57,5 +57,16 @@ std::set<const Bus*> TransportCatalogue::GetInfoAboutStop(std::string_view stopn
     }
     return {};
 }
-    
+
+void TransportCatalogue::AddDistanceStops(std::string_view lhs, std::string_view rhs, int distance) {
+    distance_[{SearchStop(lhs), SearchStop(rhs)}] = distance;
+}
+
+int TransportCatalogue::GetDistanceStops(std::string_view lhs, std::string_view rhs) const {
+    if (distance_.count({ SearchStop(lhs) , SearchStop(rhs) })) {
+        return distance_.at({ SearchStop(lhs) , SearchStop(rhs) });
+    }
+    return distance_.at({ SearchStop(rhs) , SearchStop(lhs) });
+}
+
 }
