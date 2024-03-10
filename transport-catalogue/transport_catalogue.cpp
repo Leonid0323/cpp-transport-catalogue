@@ -49,10 +49,8 @@ std::vector<const Stop*> TransportCatalogue::GetInfoAboutBus(std::string_view bu
 }
 
 std::set<const Bus*> TransportCatalogue::GetInfoAboutStop(std::string_view stopname) const{
-    if (stopname_to_bus_.count(stopname)){
-        if (stopname_to_bus_.at(stopname).empty()){
-            return {nullptr};
-        }
+    const Stop* pstop = SearchStop(stopname);
+    if (pstop != nullptr && !stopname_to_bus_.at(stopname).empty()){
         return stopname_to_bus_.at(stopname);
     }
     return {};

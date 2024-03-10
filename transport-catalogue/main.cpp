@@ -1,15 +1,9 @@
 #include <iostream>
-#include <string>
 
-#include "input_reader.h"
-#include "stat_reader.h"
-
-using namespace std;
+#include "json_reader.h"
+#include "transport_catalogue.h"
 
 int main() {
     transport_catalogue::TransportCatalogue catalogue;
-
-    input_reader::InputData(catalogue, cin);
-
-    stat_reader::IntputRequest(catalogue, cin, cout);
+    json_reader::Requests(catalogue, std::cin, std::cout);
 }
