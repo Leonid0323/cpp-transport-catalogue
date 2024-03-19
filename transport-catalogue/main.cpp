@@ -5,5 +5,6 @@
 
 int main() {
     transport_catalogue::TransportCatalogue catalogue;
-    json_reader::Requests(catalogue, std::cin, std::cout);
+    json_reader::JSONReader json_read(catalogue);
+    json_read.Requests(std::cin, std::cout);
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "json.h"
 #include "geo.h"
 #include "svg.h"
 #include "transport_catalogue.h"
@@ -35,6 +36,8 @@ inline bool IsZero(double value) {
     return std::abs(value) < EPSILON;
 }
 
+    
+    
 class SphereProjector {
 public:
     template <typename PointInputIt>
@@ -91,4 +94,10 @@ private:
     double zoom_coeff_ = 0;
 };
 
+svg::Color GetColor(json::Node color_node);    
+Mapping RenderSettings(json::Dict render_settings);   
+svg::Polyline GetBusRoute(const std::vector<const transport_catalogue::Stop*>& stops, const SphereProjector proj);
+json::Node DrawRoute(const transport_catalogue::TransportCatalogue& catalogue, json::Array base_requests, 
+                        const Mapping& mapping, json::Dict request);
+    
 }
